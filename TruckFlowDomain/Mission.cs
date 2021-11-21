@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TruckFlowDomain
 {
-    class Mission
+   public class Mission
     {
         public int IDMission { get; set;  } 
          public string Mat { get; set; }

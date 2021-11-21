@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TruckFlowDomain;
 
-namespace DAO.IDAO
+namespace TruckFlowWebApi.Interface
 {
-   public interface IDAOMission
-
+   public interface ICarCheck
     {
-        public Mission GetMission(string matricule,DateTime date); 
+        public MatriculeFlux GetVehicleNumberAndFlow(byte[] photo);
     }
 }

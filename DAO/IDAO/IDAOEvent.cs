@@ -9,6 +9,8 @@ namespace DAO.IDAO
 {
    public interface IDAOEvent
     {
-        List<Event>Get
+        public List<Event> GetLastEvents();
+        public void Update(Event e);
+        public void Insert(Event e);
     }
 }
