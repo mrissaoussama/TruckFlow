@@ -13,4 +13,8 @@
     <ProjectReference Include="..\TruckFlowDomain\TruckFlowDomain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

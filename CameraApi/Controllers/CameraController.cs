@@ -17,7 +17,6 @@ namespace CameraApi.Controllers
         [HttpGet]
         public ActionResult GetPhoto()
         {
-            Console.WriteLine(cameraIP.GetPhoto());
             return File(cameraIP.GetPhoto(), "application/octet-stream");
         }
     }

@@ -1,5 +1,4 @@
-﻿using DAO.DBConnection;
-using DAO.IDAO;
+﻿using DAO.IDAO;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -15,18 +14,20 @@ namespace DAO.DAO
         MySqlConnection connection;
         MySqlCommand command;
         MySqlDataReader cursor;
-        public DAOEvent(DBConnect db)
+        public DAOEvent(MySqlConnection db)
         {
-            connection = db.Connection;
+            connection = db;
             command = new MySqlCommand();
         }
         public List<Event> GetLastEvents()
         {
             List<Event> eventlist = new();
 
-            using (connection)
+            try
             {
-                String req = "SELECT * FROM event ORDER BY id DESC LIMIT 20";
+                connection.Open();
+
+                String req = "SELECT * FROM event ORDER BY idevent DESC LIMIT 20";
 
                 command.Parameters.Clear();
                 command.Connection = connection;
@@ -40,37 +41,57 @@ namespace DAO.DAO
 
                     e.dateevent = cursor.GetDateTime(2).Date;
                     e.heureevent = cursor.GetDateTime(3).ToLocalTime();
-                    e.flux= cursor.GetString(4);
+                    e.flux = cursor.GetString(4);
                     e.autorise = cursor.GetBoolean(5);
-                    cursor.GetBytes(6, 0, e.photo, 0, e.photo.Length);
+                    e.photo = (byte[])(cursor["photo"]);
                     e.autorise = cursor.GetBoolean(5);
 
                     eventlist.Add(e);
 
                 }
                 cursor.Close();
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("error retrieving events: " + ex);
+            }
+            finally
+            {
+                connection.Close();
+
             }
             return eventlist;
+
         }
 
         public void Insert(Event e)
         {
-            using (connection)
-            {
+            try
+           { connection.Open();
+         
                 command.Parameters.Clear();
                 command.Connection = connection;
-                String req = "insert into Event(mat,dateevent,heureevent,flux,autorise,photo,sync) " +
+                String req = "insert into event(mat,dateevent,heureevent,flux,autorise,photo,sync) " +
                     "        values (@mat,@dateevent,@heureevent,@flux,@autorise,@photo,@sync)";
                 command.Parameters.AddWithValue("@mat", e.mat);
                 command.Parameters.AddWithValue("@dateevent", e.dateevent.Date);
-                command.Parameters.AddWithValue("@heureevent", e.heureevent);
+                command.Parameters.AddWithValue("@heureevent", e.heureevent.ToLocalTime());
                 command.Parameters.AddWithValue("@flux", e.flux);
                 command.Parameters.AddWithValue("@autorise", e.autorise);
                 command.Parameters.AddWithValue("@photo", e.photo);
                 command.Parameters.AddWithValue("@sync", e.sync);
                 command.CommandText = req;
                 command.ExecuteNonQuery();
+                
             }
+            catch(MySqlException ex)
+            {
+                Console.WriteLine("insertion error: " + ex);
+            }
+            finally {     
+                connection.Close();
+}
         }
 
         public void Update(Event e)
@@ -79,7 +100,7 @@ namespace DAO.DAO
             {
                 command.Parameters.Clear();
                 command.Connection = connection;
-                String req = "update Event set mat=@mat,dateevent=@dateevent,heureevent=@heureevent,flux=@flux,autorise=@autorise,photo=@photo,sync=@sync)" +
+                String req = "update event set mat=@mat,dateevent=@dateevent,heureevent=@heureevent,flux=@flux,autorise=@autorise,photo=@photo,sync=@sync)" +
                     " where idevent=@idevent " ;
                 command.Parameters.AddWithValue("@idevent", e.idevent);
                 command.Parameters.AddWithValue("@mat", e.mat);

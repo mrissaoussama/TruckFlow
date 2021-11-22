@@ -9,8 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using TruckFlowWebApi.Interface;
@@ -24,7 +26,7 @@ namespace TruckFlowWebApi
         {
             Configuration = configuration;
         }
-
+       
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,7 +38,14 @@ namespace TruckFlowWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TruckFlowWebApi", Version = "v1" });
             });
+            ConnectionStringSettings settings =
+     ConfigurationManager.ConnectionStrings["truckflowdb"];
+
+            services.AddSingleton<MySqlConnection>(_ => new MySqlConnection(settings.ConnectionString));
             services.AddScoped<ICarCheck, CarCheck>();
+            services.AddScoped<IDAOEvent, DAOEvent>();
+                
+
 
         }
 

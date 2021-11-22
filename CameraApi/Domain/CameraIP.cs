@@ -13,8 +13,6 @@ namespace CameraApi.Metier
         {
             var rand = new Random();
             var files = Directory.GetFiles("images");
-            Console.WriteLine(files.Length);
-
             return (File.ReadAllBytes(files[rand.Next(files.Length)]));
         }
       
