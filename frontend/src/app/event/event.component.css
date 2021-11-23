@@ -1,0 +1,35 @@
+html {
+    font-family: 'helvetica neue', helvetica, arial, sans-serif;
+  }
+  body{
+    background-color: rgb(202, 182, 155);
+  }
+  
+  td , th {
+    font-family: 'Rock Salt', cursive;
+  }
+  
+  th {
+    letter-spacing: 4px;
+    color: rgb(139, 76, 184);
+  }
+  
+  td {
+    letter-spacing: 2px;
+    border-width: 1px;
+    border-style: double;
+  }
+  
+table{
+  border-width: 1px;
+  border-style: double; border-width: 1px;
+  border-style: double;
+    text-align: center;
+    
+  }
+  
+  tr {
+    text-align: center;
+    border-width: 1px;
+    border-style: double;
+  }

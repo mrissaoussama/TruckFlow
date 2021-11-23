@@ -1,0 +1,36 @@
+<html>
+<head> <title> Event  </title></head>
+<body> 
+  <table *ngFor="let event of events" >
+    <th> Tableau d'évenements</th>
+    <tr>
+      <td> Id </td>
+      <td> {{ event.id }} </td>
+    </tr>
+    <tr>
+      <td> Matricule </td>
+      <td> {{ event.mat }}</td>
+    </tr>
+    <tr> 
+      <td> Date d'évenement </td>
+      <td> {{ event.dateevent }}</td>
+    </tr>
+    <tr> 
+      <td> Heure d'évenement </td>
+      <td> {{ event.heureevent }} </td>
+    </tr>
+    <tr> 
+      <td> Autorisation </td>
+      <td> {{ event.autorise }}</td>
+    </tr>
+    <tr> 
+      <td> Flux </td>
+      <td> {{ event.flux }}</td>
+    </tr>
+    <tr> 
+      <td> Photo </td>
+      <td>{{ event.photo }} </td>
+    </tr>
+  </table>
+</body>
+</html>
