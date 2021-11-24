@@ -8,3 +8,5 @@ Net version:5
 
 
 camera web api ip and database string is in "TruckFlowWebApi/app.config"
+
+start the server then go to http://localhost:4200/getlastevents
