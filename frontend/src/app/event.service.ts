@@ -6,10 +6,10 @@ import { Byte } from '@angular/compiler/src/util';
   providedIn: 'root'
 })
 export class EventService {
-  
+
   constructor(private webReqService: WebRequestService) { }
   getevent() {
-    return this.webReqService.get('event');
+    return this.webReqService.get('getlastevents');
   }
   Sendevent(mat: string , dateevent :Date , heureevent :string, autorise : boolean , flux : string , photo :  Byte[])  {
     // We want to send a web request to create a list

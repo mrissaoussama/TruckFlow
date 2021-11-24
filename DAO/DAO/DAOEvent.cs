@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,9 @@ namespace DAO.DAO
 
             try
             {
-                connection.Open();
+                if (connection.State == ConnectionState.Closed)
+
+                    connection.Open();
 
                 String req = "SELECT * FROM event ORDER BY idevent DESC LIMIT 20";
 
@@ -40,7 +43,7 @@ namespace DAO.DAO
                     e.mat = cursor.GetString(1);
 
                     e.dateevent = cursor.GetDateTime(2).Date;
-                    e.heureevent = cursor.GetDateTime(3).ToLocalTime();
+                    e.heureevent = cursor.GetTimeSpan(3);
                     e.flux = cursor.GetString(4);
                     e.autorise = cursor.GetBoolean(5);
                     e.photo = (byte[])(cursor["photo"]);
@@ -56,6 +59,10 @@ namespace DAO.DAO
             {
                 Console.WriteLine("error retrieving events: " + ex);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error retrieving events: " + ex);
+            }
             finally
             {
                 connection.Close();
@@ -68,7 +75,9 @@ namespace DAO.DAO
         public void Insert(Event e)
         {
             try
-           { connection.Open();
+           { 
+                if(connection.State== ConnectionState.Closed)
+                    connection.Open();
          
                 command.Parameters.Clear();
                 command.Connection = connection;
@@ -76,7 +85,7 @@ namespace DAO.DAO
                     "        values (@mat,@dateevent,@heureevent,@flux,@autorise,@photo,@sync)";
                 command.Parameters.AddWithValue("@mat", e.mat);
                 command.Parameters.AddWithValue("@dateevent", e.dateevent.Date);
-                command.Parameters.AddWithValue("@heureevent", e.heureevent.ToLocalTime());
+                command.Parameters.AddWithValue("@heureevent", e.heureevent);
                 command.Parameters.AddWithValue("@flux", e.flux);
                 command.Parameters.AddWithValue("@autorise", e.autorise);
                 command.Parameters.AddWithValue("@photo", e.photo);

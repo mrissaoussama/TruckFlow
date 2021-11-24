@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using TruckFlowDomain;
 using TruckFlowWebApi.Interface;
 
@@ -19,8 +17,11 @@ namespace TruckFlowWebApi.Model
                 return null;
             }
             else
-            {
-                return new MatriculeFlux(545, 5465, "in");
+            { if(chance>50 && chance <=75)
+
+                return new MatriculeFlux(rand.Next(0000, 10000), rand.Next(000, 1000), "in");
+                return new MatriculeFlux(rand.Next(0000, 10000), rand.Next(000, 1000), "out");
+
             }
 
         }

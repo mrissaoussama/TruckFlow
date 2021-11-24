@@ -32,7 +32,12 @@ namespace TruckFlowWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddDefaultPolicy( builder =>
+            {
+                builder.WithOrigins("http://localhost:4200").AllowAnyHeader()
+                                                  .AllowAnyMethod(); 
 
+            }));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -52,16 +57,18 @@ namespace TruckFlowWebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TruckFlowWebApi v1"));
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 
@@ -69,6 +76,7 @@ namespace TruckFlowWebApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

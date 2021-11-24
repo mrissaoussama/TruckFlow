@@ -1,7 +1,6 @@
 ﻿using DAO.IDAO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +34,7 @@ namespace TruckFlowWebApi.Model
                 HttpClient client = new HttpClient();
                   HttpResponseMessage response = new HttpResponseMessage();
                   byte[] mybytearray = null;
-                while(true)
+                while (true)
                 {
                     Uri uri = new(url);
                     response = client.GetAsync(uri).Result;
@@ -43,15 +42,16 @@ namespace TruckFlowWebApi.Model
                     if (response.IsSuccessStatusCode)
                   {
                         mybytearray = response.Content.ReadAsByteArrayAsync().Result;
-                      if (mybytearray != null || mybytearray.Length != 0)
-                      {
-                          MatriculeFlux m = carCheck.GetVehicleNumberAndFlow(mybytearray);
-                          Event e=new("kip",DateTime.Now.Date,DateTime.Now.ToLocalTime(),"entry",false,mybytearray,false);
-                            daoevent.Insert(e);
-                      }
+                        MatriculeFlux m = carCheck.GetVehicleNumberAndFlow(mybytearray);
 
-                  }
-                  Thread.Sleep(5000);
+                        if (m != null)
+                      {
+                          Event e=new(m.Num+" تونس "+m.Serie,DateTime.Now.Date,DateTime.Now.TimeOfDay,m.Flux,false,mybytearray,false);
+                            daoevent.Insert(e);
+                        }
+
+                    }
+                  Thread.Sleep(8000);
                     }
 
               }

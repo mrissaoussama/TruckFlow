@@ -9,7 +9,7 @@ namespace TruckFlowDomain
 {
     public class Event
     {
-        public Event(string mat, DateTime dateevent, DateTime heureevent, string flux, bool autorise, byte[] photo, bool sync)
+        public Event(string mat, DateTime dateevent, TimeSpan heureevent, string flux, bool autorise, byte[] photo, bool sync)
         {
             this.mat = mat;
             this.dateevent = dateevent;
@@ -23,7 +23,7 @@ namespace TruckFlowDomain
         {
             
         }
-        public Event(int idevent, string mat, DateTime dateevent, DateTime heureevent, string flux, bool autorise, byte[] photo, bool sync)
+        public Event(int idevent, string mat, DateTime dateevent, TimeSpan heureevent, string flux, bool autorise, byte[] photo, bool sync)
         {
             this.idevent = idevent;
             this.mat = mat;
@@ -38,7 +38,7 @@ namespace TruckFlowDomain
         public int idevent { get; set; }
         public string mat { get; set; }
         public DateTime dateevent { get; set; }
-        public DateTime heureevent { get; set; }
+        public TimeSpan heureevent { get; set; }
         public string flux { get; set; }
         public bool autorise { get; set; }
         public byte[] photo { get; set; }

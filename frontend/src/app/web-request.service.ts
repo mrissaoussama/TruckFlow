@@ -9,7 +9,7 @@ export class WebRequestService {
   readonly ROOT_URL;
 
   constructor(private http: HttpClient) {
-    this.ROOT_URL = 'http://localhost:65060';
+    this.ROOT_URL = 'https://localhost:44398';
   }
 
   get(uri: string) {
@@ -23,8 +23,8 @@ export class WebRequestService {
 
   patch(uri: string, payload: Object) {
     return this.http.patch(`${this.ROOT_URL}/${uri}`, payload );
-  } 
-  
+  }
+
 
 
   delete(uri: string) {
@@ -32,9 +32,9 @@ export class WebRequestService {
     return this.http.delete(`${this.ROOT_URL}/${uri}`);
   }
 
- 
 
-  
+
+
 
 
 

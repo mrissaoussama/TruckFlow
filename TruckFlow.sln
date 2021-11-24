@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckFlowDomain", "TruckFlowDomain\TruckFlowDomain.csproj", "{4F765660-5494-40C7-80A0-BD3C350F9EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraApi", "CameraApi\CameraApi.csproj", "{39189083-096B-46A4-8A2F-855884DE543F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraApi", "CameraApi\CameraApi.csproj", "{39189083-096B-46A4-8A2F-855884DE543F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAO", "DAO\DAO.csproj", "{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckFlowWebApi", "TruckFlowWebApi\TruckFlowWebApi.csproj", "{6924314B-4AA1-4396-967F-A271128EFEA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckFlowWebApi", "TruckFlowWebApi\TruckFlowWebApi.csproj", "{6924314B-4AA1-4396-967F-A271128EFEA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
