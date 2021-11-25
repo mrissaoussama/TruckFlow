@@ -15,9 +15,9 @@ namespace DAO.DAO
         MySqlConnection connection;
         MySqlCommand command;
         MySqlDataReader cursor;
-        public DAOEvent(MySqlConnection db)
+        public DAOEvent(DatabaseConnection db)
         {
-            connection = db;
+            connection = db.getConnection();
             command = new MySqlCommand();
         }
         public List<Event> GetLastEvents()
@@ -68,9 +68,41 @@ namespace DAO.DAO
                 connection.Close();
 
             }
+
             return eventlist;
 
         }
+        public List<Event> SyncEvents(List<Event> eventlist)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                command.Parameters.Clear();
+                command.Connection = connection;
+                String req = "update event set sync=true where idevent in ("
+               + string.Join(",", eventlist)
+               + ")";
+                command.CommandText = req;
+                command.ExecuteNonQuery();
+                eventlist.ForEach(x => x.autorise = true);
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("error retrieving events: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error retrieving events: " + ex);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return eventlist;
+        }
+    
 
         public void Insert(Event e)
         {

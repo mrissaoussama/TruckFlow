@@ -1,3 +1,4 @@
+using DAO;
 using DAO.DAO;
 using DAO.IDAO;
 using Microsoft.AspNetCore.Builder;
@@ -43,10 +44,10 @@ namespace TruckFlowWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TruckFlowWebApi", Version = "v1" });
             });
-            ConnectionStringSettings settings =
-     ConfigurationManager.ConnectionStrings["truckflowdb"];
+            //     ConnectionStringSettings settings =ConfigurationManager.ConnectionStrings["truckflowdb"];
 
-            services.AddSingleton<MySqlConnection>(_ => new MySqlConnection(settings.ConnectionString));
+            // services.AddSingleton<MySqlConnection>(_ => new MySqlConnection(settings.ConnectionString));
+            services.AddSingleton<DatabaseConnection>);
             services.AddScoped<ICarCheck, CarCheck>();
             services.AddScoped<IDAOEvent, DAOEvent>();
                 
