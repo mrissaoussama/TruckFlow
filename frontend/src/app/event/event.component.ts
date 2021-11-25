@@ -14,7 +14,7 @@ export class EventComponent implements OnInit {
    subscription = Subscription;
    intervalId: number = 0;
   constructor( private eventService : EventService,private sanitizer:DomSanitizer) { }
-
+ 
   ngOnInit(): void {
     this.eventService.getevent().subscribe((data: any) => {
       for(var i=0;i<this.events.length;i++)
