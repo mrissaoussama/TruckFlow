@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckFlowDomain;
 
-namespace DAO.DAO
+namespace DAOMySql.DAO
 {
     public class DAOEvent : IDAOEvent
     {
@@ -19,6 +19,7 @@ namespace DAO.DAO
         {
             connection = db.getConnection();
             command = new MySqlCommand();
+            command.Connection = connection;
         }
         public List<Event> GetLastEvents()
         {
@@ -26,14 +27,14 @@ namespace DAO.DAO
 
             try
             {
-                if (connection.State == ConnectionState.Closed)
+                if (command.Connection.State == ConnectionState.Closed)
+                    command.Connection.Open();
 
-                    connection.Open();
+
 
                 String req = "SELECT * FROM event ORDER BY idevent DESC LIMIT 20";
 
                 command.Parameters.Clear();
-                command.Connection = connection;
                 command.CommandText = req;
                 cursor = command.ExecuteReader();
                 while (cursor.Read())
@@ -65,54 +66,53 @@ namespace DAO.DAO
             }
             finally
             {
-                connection.Close();
+              connection.Close();
 
             }
 
-            return eventlist;
+            return SyncEvents(eventlist);
 
         }
         public List<Event> SyncEvents(List<Event> eventlist)
-        {
-            try
+        {if (eventlist != null || eventlist.Count != 0)
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
+                try
+                {
+                    if (command.Connection.State == ConnectionState.Closed)
+                        command.Connection.Open();
 
-                command.Parameters.Clear();
-                command.Connection = connection;
-                String req = "update event set sync=true where idevent in ("
-               + string.Join(",", eventlist)
-               + ")";
-                command.CommandText = req;
-                command.ExecuteNonQuery();
-                eventlist.ForEach(x => x.autorise = true);
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("error retrieving events: " + ex);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error retrieving events: " + ex);
-            }
-            finally
-            {
-                connection.Close();
+
+                    command.Parameters.Clear();
+                    String req = "update event set sync=true where idevent in ("
+                   + string.Join(",", eventlist)
+                   + ")";
+                    command.CommandText = req;
+                    command.ExecuteNonQuery();
+                    eventlist.ForEach(x => x.autorise = true);
+                }
+                catch (MySqlException ex)
+                {
+                    Console.WriteLine("error retrieving events: " + ex);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("error retrieving events: " + ex);
+                }
+                finally
+                {
+                    // connection.Close();
+                }
             }
             return eventlist;
         }
     
-
         public void Insert(Event e)
         {
             try
            { 
-                if(connection.State== ConnectionState.Closed)
-                    connection.Open();
-         
+                if (command.Connection.State== ConnectionState.Closed)
+                    command.Connection.Open();
                 command.Parameters.Clear();
-                command.Connection = connection;
                 String req = "insert into event(mat,dateevent,heureevent,flux,autorise,photo,sync) " +
                     "        values (@mat,@dateevent,@heureevent,@flux,@autorise,@photo,@sync)";
                 command.Parameters.AddWithValue("@mat", e.mat);
@@ -124,14 +124,19 @@ namespace DAO.DAO
                 command.Parameters.AddWithValue("@sync", e.sync);
                 command.CommandText = req;
                 command.ExecuteNonQuery();
-                
             }
             catch(MySqlException ex)
             {
                 Console.WriteLine("insertion error: " + ex);
             }
+            catch(InvalidOperationException exp)
+            {
+                Console.WriteLine("insertion error: " + exp);
+
+
+            }
             finally {     
-                connection.Close();
+               connection.Close();
 }
         }
 
@@ -140,7 +145,6 @@ namespace DAO.DAO
             using (connection)
             {
                 command.Parameters.Clear();
-                command.Connection = connection;
                 String req = "update event set mat=@mat,dateevent=@dateevent,heureevent=@heureevent,flux=@flux,autorise=@autorise,photo=@photo,sync=@sync)" +
                     " where idevent=@idevent " ;
                 command.Parameters.AddWithValue("@idevent", e.idevent);

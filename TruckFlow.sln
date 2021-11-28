@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckFlowDomain", "TruckFlo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraApi", "CameraApi\CameraApi.csproj", "{39189083-096B-46A4-8A2F-855884DE543F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAO", "DAO\DAO.csproj", "{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAOMySql", "DAO\DAOMySql.csproj", "{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckFlowWebApi", "TruckFlowWebApi\TruckFlowWebApi.csproj", "{6924314B-4AA1-4396-967F-A271128EFEA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAOExpressSqlEF6", "DAOExpressSqlEF6\DAOExpressSqlEF6.csproj", "{78DA290A-6E1D-4FB3-A17C-9D96A001DDE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,13 +28,16 @@ Global
 		{39189083-096B-46A4-8A2F-855884DE543F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39189083-096B-46A4-8A2F-855884DE543F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DCC1143-5789-4A65-8B3F-03B2F9739D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6924314B-4AA1-4396-967F-A271128EFEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6924314B-4AA1-4396-967F-A271128EFEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6924314B-4AA1-4396-967F-A271128EFEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6924314B-4AA1-4396-967F-A271128EFEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78DA290A-6E1D-4FB3-A17C-9D96A001DDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78DA290A-6E1D-4FB3-A17C-9D96A001DDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78DA290A-6E1D-4FB3-A17C-9D96A001DDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78DA290A-6E1D-4FB3-A17C-9D96A001DDE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

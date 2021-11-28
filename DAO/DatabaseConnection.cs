@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAO
+namespace DAOMySql
 {
     public class DatabaseConnection
     {
@@ -16,6 +16,7 @@ namespace DAO
         public DatabaseConnection()
         {this.connectionstring = ConfigurationManager.ConnectionStrings["truckflowdb"].ConnectionString;
             this.dbConnection = new(connectionstring);
+
         }
         public MySqlConnection getConnection()
         { return dbConnection; }

@@ -10,57 +10,28 @@ import { interval, Subscription } from 'rxjs';
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
-   events: Event[] = [];
-   subscription = Subscription;
-   intervalId: number = 0;
-  constructor( private eventService : EventService,private sanitizer:DomSanitizer) { }
-
+  events: Event[] = [];
+  constructor(private eventService: EventService) { }
   ngOnInit(): void {
-    this.eventService.getevent().subscribe((data: any) => {
-      for(var i=0;i<this.events.length;i++)
-      {
-        data[i].photo=this.blobtoimage(this.byteaaraytoblob(this.events[i].photo));
-      }
-      this.events=data
-    
-  setInterval(()=> { this.getevents() }, 1000);
-
-  // polling ***** Refresh after 10000 second
-  /*const source = interval(10000);
-  const text = 'Your Text Here';
-  this.subscription = source.subscribe(val => this.getevents());*/
-  //this.intervalId = setInterval(this.getevents(), 10000);
-  });
-}
-
-  getevents (){
-    this.eventService.getevent().subscribe((data:any)=> {
-      for(var i=0 ; i< this.events.length;i++)
-      {
-        data[i].photo=this.blobtoimage(this.byteaaraytoblob(this.events[i].photo));
-      }
-      this.events=data
-      console.log("page refreshed successfully")
-    })
+    setInterval(() => { this.getevents() }, 8000);
   }
-  blobtoimage(blob:any){
-  var reader = new FileReader();
-reader.readAsDataURL(blob);
-reader.onloadend = function() {
-  var base64data = reader.result;
-  return (base64data);}
-}
-   byteaaraytoblob(arr:Byte[] )
-   {
-    const byteArray = new Uint16Array(arr);
-    var b= new Blob([byteArray], {type: 'image/png'});
-    var unsafeImageUrl = URL.createObjectURL(b);
-   return   unsafeImageUrl;
-};
-  Sendevent(mat: string , dateevent :Date , heureevent :string, autorise : boolean , flux : string , photo : Byte[] ) {
-    this.eventService.Sendevent( mat , dateevent  , heureevent , autorise , flux , photo    ).subscribe(data => {
-      console.log(data);
-          });
+  async getevents() {
+    console.log("sending")
+    this.eventService.getevent().subscribe(async (data: any) => {
+      for (var i = 0; i < data.length; i++) {
+        if (this.events.findIndex(x => x.idevent == data[i].idevent) == -1) {
+          this.events.unshift(data[i]);
+          this.checkEventsCount(20);
+        }
+      }
+    });
+  }
+checkEventsCount(n:number){
+  if (this.events.length>n)
+  {var elemsToDelete=this.events.length-n
+    this.events.splice(this.events.length - elemsToDelete,
+      elemsToDelete);
+  }
 }
 }
 

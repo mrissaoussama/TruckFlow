@@ -37,7 +37,19 @@ namespace TruckFlowWebApi.Model
                 while (true)
                 {
                     Uri uri = new(url);
-                    response = client.GetAsync(uri).Result;
+                    try
+                    {
+                        response = client.GetAsync(uri).Result;
+                    }
+                    catch(HttpRequestException ex)
+                    {
+                        Console.WriteLine("error getting photo: " + ex.Message);
+                    }
+                    catch (AggregateException ex)
+                    {
+                        Console.WriteLine("error getting photo: " + ex.Message);
+                    }
+
 
                     if (response.IsSuccessStatusCode)
                   {
@@ -46,7 +58,7 @@ namespace TruckFlowWebApi.Model
 
                         if (m != null)
                       {
-                          Event e=new(m.Num+" تونس "+m.Serie,DateTime.Now.Date,DateTime.Now.TimeOfDay,m.Flux,false,mybytearray,false);
+                          Event e=new(" تونس " + m.Num+m.Serie,DateTime.Now.Date,DateTime.Now.TimeOfDay,m.Flux,false,mybytearray,false);
                             daoevent.Insert(e);
                         }
 

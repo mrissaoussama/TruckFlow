@@ -10,7 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAO\DAO.csproj" />
+    <ProjectReference Include="..\DAOExpressSqlEF6\DAOExpressSqlEF6.csproj" />
+    <ProjectReference Include="..\DAO\DAOMySql.csproj" />
     <ProjectReference Include="..\TruckFlowDomain\TruckFlowDomain.csproj" />
   </ItemGroup>
 

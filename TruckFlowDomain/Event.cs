@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace TruckFlowDomain
             this.photo = photo;
             this.sync = sync;
         }
-
+        [Key]
         public int idevent { get; set; }
         public string mat { get; set; }
         public DateTime dateevent { get; set; }

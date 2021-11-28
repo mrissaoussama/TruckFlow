@@ -1,6 +1,6 @@
-using DAO;
-using DAO.DAO;
+
 using DAO.IDAO;
+using DAOExpressSqlEF6.DAONS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,7 +47,6 @@ namespace TruckFlowWebApi
             //     ConnectionStringSettings settings =ConfigurationManager.ConnectionStrings["truckflowdb"];
 
             // services.AddSingleton<MySqlConnection>(_ => new MySqlConnection(settings.ConnectionString));
-            services.AddSingleton<DatabaseConnection>);
             services.AddScoped<ICarCheck, CarCheck>();
             services.AddScoped<IDAOEvent, DAOEvent>();
                 
