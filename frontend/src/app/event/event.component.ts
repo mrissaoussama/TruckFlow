@@ -4,10 +4,11 @@ import { EventService } from 'src/app/event.service';
 import { Byte } from '@angular/compiler/src/util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
-  styleUrls: ['./event.component.css']
+  styleUrls: ['./event.component.css'],
 })
 export class EventComponent implements OnInit {
    events: Event[] = [];
