@@ -35,7 +35,7 @@
 					    </thead>
 					    <tbody>
 					      <tr *ngFor="let event of events">
-					        <th scope="row" class="scope" >{{ event.idevent }}/th>
+					        <th scope="row" class="scope" >{{ event.idevent }} </th>
 					        <td> {{ event.mat }}</td>
 					        <td>{{ event.dateevent.toString().split("T")[0] }}</td>
 					        <td> {{ event.heureevent.hours+":"+event.heureevent.minutes+":"+event.heureevent.seconds }}</td>
@@ -44,7 +44,7 @@
 						
 					        <td>
 								<div  *ngIf="isDisplay" style="height: 100px ; width:100px ;">
-									{{ event.photo }}
+									<img src="data:image/png;base64,{{event.photo}}" style="height: 100px; width: 100px;">
 								</div>  
 								<button class="btn btn-primary" (click)="toglleDisplay()"> Voir l'image  </button>
 							
