@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Text.Json;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
@@ -94,14 +95,11 @@ namespace WebSocketServerProject.MidlleWare
         }
        
         private async Task SendMessageAsync(WebSocket ws, string msg)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream();
-            bf.Serialize(ms, truckFlow.GetLastEvents().First());
-
-           
-        // buffer = Encoding.UTF8.GetBytes();
-            await ws.SendAsync(ms.ToArray(), WebSocketMessageType.Text, true, CancellationToken.None);
+        { 
+            var json = JsonConvert.SerializeObject(truckFlow.GetLastEvents());
+           // ArraySegment<Byte> arr = new(truckFlow.GetLastEvents().ToArray()); 
+         var  buffer = Encoding.UTF8.GetBytes(json.ToCharArray());
+            await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
 
 
         }
