@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TruckFlowDomain;
 using TruckFlowWebApi.Interface;
+using WebSocketServerProject.MidlleWare;
 
 namespace TruckFlowWebApi.Model
 {
@@ -14,12 +15,14 @@ namespace TruckFlowWebApi.Model
         ICarCheck carCheck;
         IDAOEvent daoevent;
         string url;
+        WebSocketServerConnectionManager _socketManager;
 
-        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent,string url)
+        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent,string url,WebSocketServerConnectionManager socketManager)
         {
             this.url = url;
             this.carCheck = carCheck;
            this.daoevent = daoevent;
+            _socketManager = socketManager;
         }
         public IEnumerable<Event> GetLastEvents()
         {
@@ -60,6 +63,7 @@ namespace TruckFlowWebApi.Model
                       {
                           Event e=new(" تونس " + m.Num+m.Serie,DateTime.Now.Date,DateTime.Now.TimeOfDay,m.Flux,false,mybytearray,false);
                             daoevent.Insert(e);
+                            _socketManager.GetSockets();
                         }
 
                     }

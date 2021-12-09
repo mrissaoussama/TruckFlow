@@ -38,7 +38,7 @@
 					        <th scope="row" class="scope" >{{ event.idevent }} </th>
 					        <td> {{ event.mat }}</td>
 					        <td>{{ event.dateevent.toString().split("T")[0] }}</td>
-					        <td> {{ event.heureevent.hours+":"+event.heureevent.minutes+":"+event.heureevent.seconds }}</td>
+					        <td> {{ event.heureevent | slice:0:8 }}</td>
 					        <td>{{ event.autorise }}</td>
                              <td>{{ event.flux }}</td>
 						
