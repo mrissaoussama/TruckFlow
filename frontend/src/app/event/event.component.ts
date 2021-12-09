@@ -12,8 +12,14 @@ import { getGlobalThis } from '@microsoft/signalr/dist/esm/Utils';
   templateUrl: './event.component.html',
   styleUrls: ['./event.component.css'],
 })
+  
 export class EventComponent implements OnInit {
+   isDisplay = false;
   events: Event[] = [];
+
+  toglleDisplay(){
+    this.isDisplay = !this.isDisplay;
+  }
   constructor(private eventService: EventService,private http: HttpClient ) { }
   ngOnInit(): void {
 var socket = new WebSocket("ws://localhost:65060");

@@ -29,7 +29,7 @@
 					        <th>DATE D'EVENEMENT</th>
 					        <th>HEURE D'EVENEMENT</th>
 					        <th> AUTORISATION</th>
-					        <th>REGISTER</th>
+					        <th>FLUX</th>
 							<th>IMAGE</th>
 					      </tr>
 					    </thead>
@@ -41,7 +41,16 @@
 					        <td> {{ event.heureevent.hours+":"+event.heureevent.minutes+":"+event.heureevent.seconds }}</td>
 					        <td>{{ event.autorise }}</td>
                              <td>{{ event.flux }}</td>
-					        <td><button class="btn btn-primary">Voir l'image</button></td>
+						
+					        <td>
+								<div  *ngIf="isDisplay" style="height: 100px ; width:100px ;">
+									{{ event.photo }}
+								</div>  
+								<button class="btn btn-primary" (click)="toglleDisplay()"> Voir l'image  </button>
+							
+							</td>
+					
+						
 					      </tr>
 					     
 					    </tbody>
