@@ -8,7 +8,7 @@ export class WebsocketService {
 
   constructor() { }
 
-  private subject: Rx.Subject<MessageEvent> | any ; 
+  private subject: Rx.Subject<MessageEvent> | any ;
   public connect(url: string): Rx.Subject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create(url);
@@ -34,5 +34,5 @@ export class WebsocketService {
     };
     return Rx.Subject.create(observer, observable);
   }
-  
+
 }

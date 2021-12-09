@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using TruckFlowWebApi.Controllers;
 using TruckFlowWebApi.Interface;
 using TruckFlowWebApi.Model;
+using WebSocketServerProject.MidlleWare;
 
 namespace TruckFlowWebApi
 {
@@ -33,6 +35,10 @@ namespace TruckFlowWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddWebSocketMiddleWare();
+
+            services.AddScoped<ICarCheck, CarCheck>();
+            services.AddScoped<IDAOEvent, DAOEvent>();
             services.AddCors(o => o.AddDefaultPolicy( builder =>
             {
                 builder.WithOrigins("http://localhost:4200").AllowAnyHeader()
@@ -44,11 +50,8 @@ namespace TruckFlowWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TruckFlowWebApi", Version = "v1" });
             });
-            //     ConnectionStringSettings settings =ConfigurationManager.ConnectionStrings["truckflowdb"];
-
-            // services.AddSingleton<MySqlConnection>(_ => new MySqlConnection(settings.ConnectionString));
-            services.AddScoped<ICarCheck, CarCheck>();
-            services.AddScoped<IDAOEvent, DAOEvent>();
+            services.AddSignalR();
+     
                 
 
 
@@ -69,9 +72,12 @@ namespace TruckFlowWebApi
 
             app.UseRouting();
             app.UseCors();
+            app.UseWebSockets();
+            app.UseWebSocketMiddleWare();
 
+            // app.UseSignalR();
             app.UseAuthorization();
-
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

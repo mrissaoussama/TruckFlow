@@ -1,5 +1,6 @@
 ﻿using DAO.IDAO;
 using DAOExpressSqlEF6.DBContextNS;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -25,7 +25,7 @@ namespace TruckFlowWebApi.Model
         {
             return daoevent.GetLastEvents();
         }
-        public Task CheckPhoto()
+        public Task CheckPhotoAsync()
         {
             return Task.Run(() =>
             {

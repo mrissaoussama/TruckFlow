@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TruckFlowDomain
-{
+{[Serializable]
     public class Event
     {
         public Event(string mat, DateTime dateevent, TimeSpan heureevent, string flux, bool autorise, byte[] photo, bool sync)

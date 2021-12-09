@@ -4,7 +4,9 @@ import { EventService } from 'src/app/event.service';
 import { Byte } from '@angular/compiler/src/util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
-
+import { SignalRService } from '../signal-r.service';
+import { HttpClient } from '@angular/common/http';
+import * as signalR from '@microsoft/signalr';
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -12,9 +14,38 @@ import { interval, Subscription } from 'rxjs';
 })
 export class EventComponent implements OnInit {
   events: Event[] = [];
-  constructor(private eventService: EventService) { }
+  constructor(public signalRService: SignalRService,private eventService: EventService,private http: HttpClient ) { }
   ngOnInit(): void {
-    setInterval(() => { this.getevents() }, 8000);
+  //  setInterval(() => { this.getevents() }, 8000);
+
+//   var connection = new signalR.HubConnectionBuilder().withUrl("/ws").build();
+//   connection.start().then(function () {
+//     console.log("connection started");
+
+//   }).catch(function (err) {
+//     return console.error(err.toString());
+//   });
+// connection.on("getlastevents", function (user, message) {
+//   console.log(message)
+// });
+var socket = new WebSocket("https://localhost:44398/getlastevents");
+socket.onclose = function (event) {
+ // updateState();
+ console.log(event);
+};
+//socket.onerror = updateState;
+socket.onmessage = function (event) {
+  console.log(event);
+
+};
+
+
+  }
+  private startHttpRequest = () => {
+    this.http.get('https://localhost:44398/getlastevents')
+      .subscribe((res: any) => {
+        console.log(res);
+      })
   }
   async getevents() {
     console.log("sending")
