@@ -27,11 +27,14 @@ namespace WebSocketServerProject.MidlleWare
         TruckFlow truckFlow;
 
         public WebSocketServerMiddleWare(
+
             RequestDelegate next, WebSocketServerConnectionManager webSocketServerConnectionManager)
+
         {
 
             _next = next;
             _wsServerConnManager = webSocketServerConnectionManager;
+
         }
         public async Task InvokeAsync(HttpContext context)
         {

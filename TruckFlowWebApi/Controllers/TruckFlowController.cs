@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
 using System.Configuration;
-using Microsoft.AspNet.SignalR;
+//using Microsoft.AspNet.SignalR;
 
 namespace TruckFlowWebApi.Controllers
 {[ApiController]

@@ -4,9 +4,9 @@ import { EventService } from 'src/app/event.service';
 import { Byte } from '@angular/compiler/src/util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
-import { SignalRService } from '../signal-r.service';
 import { HttpClient } from '@angular/common/http';
 import * as signalR from '@microsoft/signalr';
+import { getGlobalThis } from '@microsoft/signalr/dist/esm/Utils';
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -14,39 +14,40 @@ import * as signalR from '@microsoft/signalr';
 })
 export class EventComponent implements OnInit {
   events: Event[] = [];
-  constructor(public signalRService: SignalRService,private eventService: EventService,private http: HttpClient ) { }
+  constructor(private eventService: EventService,private http: HttpClient ) { }
   ngOnInit(): void {
-  //  setInterval(() => { this.getevents() }, 8000);
-
-//   var connection = new signalR.HubConnectionBuilder().withUrl("/ws").build();
-//   connection.start().then(function () {
-//     console.log("connection started");
-
-//   }).catch(function (err) {
-//     return console.error(err.toString());
-//   });
-// connection.on("getlastevents", function (user, message) {
-//   console.log(message)
-// });
-var socket = new WebSocket("https://localhost:44398/getlastevents");
+var socket = new WebSocket("ws://localhost:65060");
 socket.onclose = function (event) {
  // updateState();
+ console.log("close");
+
  console.log(event);
 };
-//socket.onerror = updateState;
-socket.onmessage = function (event) {
-  console.log(event);
+socket.onopen=function (event) {
+  // updateState();
+  console.log("close");
 
+  console.log(event);
+ };
+//socket.onerror = updateState;
+var self=this;
+socket.onmessage = function (event) {
+  console.log("onmessage");
+  console.log(event.data);
+self.getdata(event.data)
 };
 
+  }
+ getdata(data:any)
+  {var dataarray=JSON.parse(data)
+    console.log(dataarray)
+    for (var i = 0; i < dataarray.length; i++) {
+       if (this.events.findIndex(x => x.idevent == dataarray[i].idevent) == -1) {
+        this.events.unshift(dataarray[i]);
+       this.checkEventsCount(20);
+      }
+    }}
 
-  }
-  private startHttpRequest = () => {
-    this.http.get('https://localhost:44398/getlastevents')
-      .subscribe((res: any) => {
-        console.log(res);
-      })
-  }
   async getevents() {
     console.log("sending")
     this.eventService.getevent().subscribe(async (data: any) => {
@@ -66,4 +67,3 @@ checkEventsCount(n:number){
   }
 }
 }
-
