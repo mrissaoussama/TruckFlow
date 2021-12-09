@@ -29,7 +29,8 @@
 					        <th>DATE D'EVENEMENT</th>
 					        <th>HEURE D'EVENEMENT</th>
 					        <th> AUTORISATION</th>
-					        <th>Register</th>
+					        <th>REGISTER</th>
+							<th>IMAGE</th>
 					      </tr>
 					    </thead>
 					    <tbody>
@@ -39,7 +40,7 @@
 					        <td>{{ event.dateevent.toString().split("T")[0] }}</td>
 					        <td> {{ event.heureevent.hours+":"+event.heureevent.minutes+":"+event.heureevent.seconds }}</td>
 					        <td>{{ event.autorise }}</td>
-                  <td>{{ event.autorise }}</td>
+                             <td>{{ event.flux }}</td>
 					        <td><button class="btn btn-primary">Voir l'image</button></td>
 					      </tr>
 					     
