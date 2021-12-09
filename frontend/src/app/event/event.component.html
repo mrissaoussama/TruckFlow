@@ -8,14 +8,14 @@
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
+
 
 	</head>
 	<body>
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center">
-			
+
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -38,12 +38,12 @@
 					        <th scope="row" class="scope" >{{ event.idevent }}/th>
 					        <td> {{ event.mat }}</td>
 					        <td>{{ event.dateevent.toString().split("T")[0] }}</td>
-					        <td> {{ event.heureevent.hours+":"+event.heureevent.minutes+":"+event.heureevent.seconds }}</td>
+					        <td> {{ event.heureevent| slice:0:8 }}</td>
 					        <td>{{ event.autorise }}</td>
                              <td>{{ event.flux }}</td>
 					        <td><button class="btn btn-primary">Voir l'image</button></td>
 					      </tr>
-					     
+
 					    </tbody>
 					  </table>
 					</div>
