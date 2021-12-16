@@ -27,43 +27,34 @@ namespace WebSocketServerProject.MidlleWare
        
         TruckFlow truckFlow;
 
-        public WebSocketServerMiddleWare(
+        public WebSocketServerMiddleWare(TruckFlow truckFlow,
 
             RequestDelegate next, WebSocketServerConnectionManager webSocketServerConnectionManager)
 
         {
-
+            this.truckFlow = truckFlow;
             _next = next;
             _wsServerConnManager = webSocketServerConnectionManager;
 
         }
         public async Task InvokeAsync(HttpContext context)
         {
-            this.truckFlow = new(new CarCheck(), new DAOEvent(), ConfigurationManager.AppSettings["cameraapi"].ToString());
-
-            WriteRequestParam(context);
-
             if (context.WebSockets.IsWebSocketRequest)
             {
                 WebSocket websocket = await context.WebSockets.AcceptWebSocketAsync();
-                string connID = _wsServerConnManager.AddSocket(websocket);
-                await SendMessageAsync(websocket, connID);
+                //websocket..KeepAliveInterval = TimeSpan.Zero;
+                string connID = this._wsServerConnManager.AddSocket(websocket);
+                truckFlow._socketManager = this._wsServerConnManager;
+                var json = JsonConvert.SerializeObject(truckFlow.GetLastEvents());
+                // ArraySegment<Byte> arr = new(truckFlow.GetLastEvents().ToArray()); 
+                var buffer = Encoding.UTF8.GetBytes(json.ToCharArray());
+                await websocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
                 Console.WriteLine("Socket connected...");
+                Console.WriteLine("from get" + _wsServerConnManager.GetSockets().Count);
+
                 await RecieveMessageAsync(websocket, async (result, message) =>
                 {
-                    if (result.MessageType == WebSocketMessageType.Text)
-                    {
-                        Console.WriteLine("Message recieved...");
-                        string messageRecu= Encoding.UTF8.GetString(message, 0, result.Count);
-                        Console.WriteLine($"Message {messageRecu}");
-                        await RouteJSONMessagesAsync(messageRecu);
-                        return;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Recieve Close...");
-                        return;
-                    }
+
                 });
             }
             else

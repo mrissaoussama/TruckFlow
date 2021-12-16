@@ -22,27 +22,21 @@ export class EventComponent implements OnInit {
   }
   constructor(private eventService: EventService,private http: HttpClient ) { }
   ngOnInit(): void {
-var socket = new WebSocket("ws://localhost:65060");
+var socket = new WebSocket("ws://localhost:65060/");
 socket.onclose = function (event) {
- // updateState();
  console.log("close");
-
  console.log(event);
 };
 socket.onopen=function (event) {
-  // updateState();
   console.log("close");
-
   console.log(event);
  };
-//socket.onerror = updateState;
 var self=this;
 socket.onmessage = function (event) {
   console.log("onmessage");
   console.log(event.data);
 self.getdata(event.data)
 };
-
   }
  getdata(data:any)
   {var dataarray=JSON.parse(data)

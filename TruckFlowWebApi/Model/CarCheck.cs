@@ -12,14 +12,16 @@ namespace TruckFlowWebApi.Model
         {
             Random rand = new Random();
             int chance = rand.Next(1, 101);
-            if (chance <= 50)//50% chance
+            if (chance <= 10)//50% chance
             {
                 return null;
             }
             else
-            { if(chance>50 && chance <=75)
+            {                 //    Console.WriteLine("sent event");
+if(chance>10 && chance <=75)
 
                 return new MatriculeFlux(rand.Next(0000, 10000), rand.Next(000, 1000), "in");
+                
                 return new MatriculeFlux(rand.Next(0000, 10000), rand.Next(000, 1000), "out");
 
             }

@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
 using System.Configuration;
+using WebSocketServerProject.MidlleWare;
+using Newtonsoft.Json;
+using System.Text;
 //using Microsoft.AspNet.SignalR;
 
 namespace TruckFlowWebApi.Controllers
@@ -23,32 +26,26 @@ namespace TruckFlowWebApi.Controllers
     {
         
         TruckFlow truckFlow;
-        string url;
         bool started=false;
-       // private readonly IHubContext<TruckFlowHub> _hubContext;
-
-        public TruckFlowController(ICarCheck carCheck, IDAOEvent daoevent)
+        // private readonly IHubContext<TruckFlowHub> _hubContext;
+        public TruckFlowController(ICarCheck carCheck, IDAOEvent daoevent, TruckFlow truckFlow)
         {
-          
-            this.url = ConfigurationManager.AppSettings["cameraapi"].ToString();
-            this.truckFlow = new(carCheck, daoevent, url);
-            this.Start();
+
+            this.truckFlow = truckFlow;
+            this.StartAsync();
 
         }
         [HttpGet]
         [Route("start")]
-        public IActionResult Start()
+        public async Task StartAsync()
         {if (!started)
             {
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true;
-                    truckFlow.CheckPhotoAsync();
-                }).Start();
+                 truckFlow.CheckPhotoAsync().Start();
+
                 started = true;
-                return Ok("Started");
+              //  return Ok("Started");
             }
-            else return Ok("already running");
+           // else return Ok("already running");
         }
         [HttpGet]
         [Route("getlasteventsold")]
@@ -56,32 +53,24 @@ namespace TruckFlowWebApi.Controllers
         {
             return truckFlow.GetLastEvents();
         }
+        private async Task RecieveMessageAsync(WebSocket ws, Action<WebSocketReceiveResult, byte[]> handleMessage)
+        {
+            var buffer = new byte[1024 * 4];
+            while (ws.State == WebSocketState.Open)
+            {
+                var result = await ws.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
+                handleMessage(result, buffer);
+            }
+
+        }
+
         [HttpGet]
         [Route("getlastevents")]
         public async Task GetLastEvents2()
         {
-            if (HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                using WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                await Echo(HttpContext, webSocket);
-            }
-            else
-            {
-                HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            }
+           
         }
-        private async Task Echo(HttpContext httpContext, WebSocket webSocket)
-        {
-            var buffer = new byte[1024 * 4];
-            WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            while (!result.CloseStatus.HasValue)
-            {
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
-
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-        }
+   
     }
     
 }

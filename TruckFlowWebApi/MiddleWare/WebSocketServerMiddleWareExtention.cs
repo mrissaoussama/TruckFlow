@@ -17,7 +17,6 @@ namespace WebSocketServerProject.MidlleWare
 
         public static IServiceCollection AddWebSocketMiddleWare(this IServiceCollection services)
         {
-            services.AddSingleton<WebSocketServerConnectionManager>();
             return services;
         }
     }

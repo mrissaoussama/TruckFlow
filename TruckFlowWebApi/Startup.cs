@@ -36,9 +36,12 @@ namespace TruckFlowWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebSocketMiddleWare();
-
+            services.AddSingleton<WebSocketServerConnectionManager>();
             services.AddScoped<ICarCheck, CarCheck>();
             services.AddScoped<IDAOEvent, DAOEvent>();
+            //services.AddScoped<ICarCheck, TruckFlow>();
+            services.AddSingleton<TruckFlow>();
+
             services.AddCors(o => o.AddDefaultPolicy( builder =>
             {
                 builder.WithOrigins("http://localhost:4200").AllowAnyHeader()
@@ -50,7 +53,7 @@ namespace TruckFlowWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TruckFlowWebApi", Version = "v1" });
             });
-            services.AddSignalR();
+           // services.AddSignalR();
      
                 
 

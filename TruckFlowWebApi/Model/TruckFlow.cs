@@ -1,7 +1,11 @@
 ﻿using DAO.IDAO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
+using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TruckFlowDomain;
@@ -15,63 +19,79 @@ namespace TruckFlowWebApi.Model
         ICarCheck carCheck;
         IDAOEvent daoevent;
         string url;
-        WebSocketServerConnectionManager _socketManager;
+        public WebSocketServerConnectionManager _socketManager { get; set; }
 
-        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent,string url,WebSocketServerConnectionManager socketManager)
+        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent)
         {
-            this.url = url;
+            this.url = ConfigurationManager.AppSettings["cameraapi"].ToString();
             this.carCheck = carCheck;
            this.daoevent = daoevent;
-            _socketManager = socketManager;
         }
         public IEnumerable<Event> GetLastEvents()
         {
             return daoevent.GetLastEvents();
         }
-        public Task CheckPhotoAsync()
+        public  Task CheckPhotoAsync()
         {
-            return Task.Run(() =>
-            {
-            
+          //   return new Task(() =>
+             {
 
-                HttpClient client = new HttpClient();
-                  HttpResponseMessage response = new HttpResponseMessage();
-                  byte[] mybytearray = null;
-                while (true)
-                {
-                    Uri uri = new(url);
-                    try
-                    {
-                        response = client.GetAsync(uri).Result;
+                // Thread.CurrentThread.IsBackground = true;
+                return Task.Run(async () =>
+                 {
+                     Console.WriteLine("from truck" + _socketManager.GetSockets().Count);
+
+                     HttpClient client = new HttpClient();
+                     HttpResponseMessage response = new HttpResponseMessage();
+                     byte[] mybytearray = null;
+                     while (true)
+                     {
+                         Uri uri = new(url);
+                         try
+                         {
+                             response = client.GetAsync(uri).Result;
+                         }
+                         catch (HttpRequestException ex)
+                         {
+                             Console.WriteLine("error getting photo: " + ex.Message);
+                         }
+                         catch (AggregateException ex)
+                         {
+                             Console.WriteLine("error getting photo: " + ex.Message);
+                         }
+
+
+                         if (response.IsSuccessStatusCode)
+                         {
+                             mybytearray = response.Content.ReadAsByteArrayAsync().Result;
+                             MatriculeFlux m = carCheck.GetVehicleNumberAndFlow(mybytearray);
+
+                             if (m != null)
+                             {
+                                 Event e = new(" تونس " + m.Num + m.Serie, DateTime.Now.Date, DateTime.Now.TimeOfDay, m.Flux, false, mybytearray, false);
+                                 daoevent.Insert(e);
+                                 List<Event> list = new();
+                                 list.Add(e);
+                                 Console.WriteLine("inserted"+ _socketManager.GetSockets().IsEmpty);
+                                 if (_socketManager.GetSockets().IsEmpty != true)
+                                 {
+                                     foreach (var socket in _socketManager.GetSockets())
+                                     {
+                                         var json = JsonConvert.SerializeObject(list);
+                                        // ArraySegment<Byte> arr = new(truckFlow.GetLastEvents().ToArray()); 
+                                        var buffer = Encoding.UTF8.GetBytes(json.ToCharArray());
+                                         await socket.Value.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+                                         Console.WriteLine("sent");
+                                     }
+                                 }
+                             }
+                         }
+                         await Task.Delay(5000);
                     }
-                    catch(HttpRequestException ex)
-                    {
-                        Console.WriteLine("error getting photo: " + ex.Message);
-                    }
-                    catch (AggregateException ex)
-                    {
-                        Console.WriteLine("error getting photo: " + ex.Message);
-                    }
+                 });
 
-
-                    if (response.IsSuccessStatusCode)
-                  {
-                        mybytearray = response.Content.ReadAsByteArrayAsync().Result;
-                        MatriculeFlux m = carCheck.GetVehicleNumberAndFlow(mybytearray);
-
-                        if (m != null)
-                      {
-                          Event e=new(" تونس " + m.Num+m.Serie,DateTime.Now.Date,DateTime.Now.TimeOfDay,m.Flux,false,mybytearray,false);
-                            daoevent.Insert(e);
-                            _socketManager.GetSockets();
-                        }
-
-                    }
-                  Thread.Sleep(8000);
-                    }
-
-              }
-              );
+            }
+            //);
         }
     }
 }
