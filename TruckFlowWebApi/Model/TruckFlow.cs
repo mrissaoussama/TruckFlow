@@ -72,7 +72,7 @@ namespace TruckFlowWebApi.Model
                                  daoevent.Insert(e);
                                  List<Event> list = new();
                                  list.Add(e);
-                                 Console.WriteLine("inserted"+ _socketManager.GetSockets().IsEmpty);
+                                 Console.WriteLine("inserted "+ _socketManager.GetSockets().IsEmpty);
                                  if (_socketManager.GetSockets().IsEmpty != true)
                                  {
                                      foreach (var socket in _socketManager.GetSockets())
