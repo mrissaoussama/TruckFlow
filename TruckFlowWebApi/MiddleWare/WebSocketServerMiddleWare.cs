@@ -42,11 +42,10 @@ namespace WebSocketServerProject.MidlleWare
             if (context.WebSockets.IsWebSocketRequest)
             {
                 WebSocket websocket = await context.WebSockets.AcceptWebSocketAsync();
-                //websocket..KeepAliveInterval = TimeSpan.Zero;
                 string connID = this._wsServerConnManager.AddSocket(websocket);
                 truckFlow._socketManager = this._wsServerConnManager;
                 var json = JsonConvert.SerializeObject(truckFlow.GetLastEvents());
-                // ArraySegment<Byte> arr = new(truckFlow.GetLastEvents().ToArray()); 
+                
                 var buffer = Encoding.UTF8.GetBytes(json.ToCharArray());
                 await websocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
                 Console.WriteLine("Socket connected...");
