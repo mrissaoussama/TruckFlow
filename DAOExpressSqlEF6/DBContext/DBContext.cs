@@ -7,7 +7,7 @@ namespace DAOExpressSqlEF6.DBContextNS
     {
         public DBContext() : base()
         {
-            Database.SetInitializer<DBContext>(new DropCreateDatabaseIfModelChanges<DBContext>());
+            Database.SetInitializer<DBContext>(new DropCreateDatabaseAlways<DBContext>());
 
         }
         public DbSet<Event> Events { get; set; }

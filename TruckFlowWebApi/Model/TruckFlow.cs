@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.Text;
@@ -14,32 +15,34 @@ using WebSocketServerProject.MidlleWare;
 
 namespace TruckFlowWebApi.Model
 {
-    public class TruckFlow
+    public class TruckFlow:ITruckFlow
     {
         ICarCheck carCheck;
         IDAOEvent daoevent;
         string url;
         public WebSocketServerConnectionManager _socketManager { get; set; }
 
-        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent)
+        public TruckFlow(ICarCheck carCheck, IDAOEvent daoevent, WebSocketServerConnectionManager manager)
         {
+            _socketManager = manager;
             this.url = ConfigurationManager.AppSettings["cameraapi"].ToString();
             this.carCheck = carCheck;
            this.daoevent = daoevent;
+            this.CheckPhotoAsync().Start();
+
         }
         public IEnumerable<Event> GetLastEvents()
         {
-            return daoevent.GetLastEvents();
+            return daoevent.GetLastEvents().OrderByDescending(x => x.idevent).ToList();
         }
         public  Task CheckPhotoAsync()
         {
-          //   return new Task(() =>
+            return new Task(async () =>
              {
 
                 // Thread.CurrentThread.IsBackground = true;
-                return Task.Run(async () =>
-                 {
-                     Console.WriteLine("from truck" + _socketManager.GetSockets().Count);
+              //  return Task.Run(async () =>
+                 
 
                      HttpClient client = new HttpClient();
                      HttpResponseMessage response = new HttpResponseMessage();
@@ -72,7 +75,9 @@ namespace TruckFlowWebApi.Model
                                  daoevent.Insert(e);
                                  List<Event> list = new();
                                  list.Add(e);
-                                 Console.WriteLine("inserted "+ _socketManager.GetSockets().IsEmpty);
+                                 Console.WriteLine("added");
+
+                                // Console.WriteLine("inserted "+ _socketManager.GetSockets().IsEmpty);
                                  if (_socketManager.GetSockets().IsEmpty != true)
                                  {
                                      foreach (var socket in _socketManager.GetSockets())
@@ -80,9 +85,17 @@ namespace TruckFlowWebApi.Model
                                          var json = JsonConvert.SerializeObject(list);
                                         // ArraySegment<Byte> arr = new(truckFlow.GetLastEvents().ToArray()); 
                                         var buffer = Encoding.UTF8.GetBytes(json.ToCharArray());
+                                     try
+                                     {
                                          await socket.Value.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-                                         Console.WriteLine("sent");
+
                                      }
+                                     catch(System.Net.WebSockets.WebSocketException ex)
+                                     {
+                                         Console.WriteLine(ex.Message);
+
+                                     }
+                                 }
                                  }
                              }
                          }
@@ -91,7 +104,7 @@ namespace TruckFlowWebApi.Model
                  });
 
             }
-            //);
+            //);//return new task
         }
     }
-}
+

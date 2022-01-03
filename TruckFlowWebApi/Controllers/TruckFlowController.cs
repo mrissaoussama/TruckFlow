@@ -25,27 +25,24 @@ namespace TruckFlowWebApi.Controllers
     public class TruckFlowController : Controller
     {
         
-        TruckFlow truckFlow;
+        ITruckFlow truckFlow;
         bool started=false;
-        // private readonly IHubContext<TruckFlowHub> _hubContext;
-        public TruckFlowController(ICarCheck carCheck, IDAOEvent daoevent, TruckFlow truckFlow)
+        public TruckFlowController(ITruckFlow truckFlow)
         {
 
             this.truckFlow = truckFlow;
-            this.StartAsync();
+            Start();
 
         }
         [HttpGet]
         [Route("start")]
-        public async Task StartAsync()
-        {if (!started)
+        public void Start()
+        {
+            Console.WriteLine("started");
+            if (started==false)
             {
-                 truckFlow.CheckPhotoAsync().Start();
-
                 started = true;
-              //  return Ok("Started");
             }
-           // else return Ok("already running");
         }
         [HttpGet]
         [Route("getlasteventsold")]
@@ -53,24 +50,8 @@ namespace TruckFlowWebApi.Controllers
         {
             return truckFlow.GetLastEvents();
         }
-        private async Task RecieveMessageAsync(WebSocket ws, Action<WebSocketReceiveResult, byte[]> handleMessage)
-        {
-            var buffer = new byte[1024 * 4];
-            while (ws.State == WebSocketState.Open)
-            {
-                var result = await ws.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
-                handleMessage(result, buffer);
-            }
+  
 
-        }
-
-        [HttpGet]
-        [Route("getlastevents")]
-        public async Task GetLastEvents2()
-        {
-           
-        }
-   
     }
     
 }

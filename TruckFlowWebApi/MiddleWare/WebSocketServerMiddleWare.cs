@@ -25,9 +25,9 @@ namespace WebSocketServerProject.MidlleWare
         private readonly RequestDelegate _next;
         private readonly WebSocketServerConnectionManager _wsServerConnManager;
        
-        TruckFlow truckFlow;
+        ITruckFlow truckFlow;
 
-        public WebSocketServerMiddleWare(TruckFlow truckFlow,
+        public WebSocketServerMiddleWare(ITruckFlow truckFlow,
 
             RequestDelegate next, WebSocketServerConnectionManager webSocketServerConnectionManager)
 
@@ -100,26 +100,11 @@ namespace WebSocketServerProject.MidlleWare
         public async Task RouteJSONMessagesAsync(string message)
         {
         //    var data = JsonConvert.DeserializeObject<MessageTransmis>(message);
-            if (true)
             {
                 WebSocket ws = _wsServerConnManager.GetSockets().First().Value;
                 await SendMessageAsync(ws, message);
             }
-            else
-            {
-                Console.WriteLine("BroadCast...");
-                foreach (var ws in _wsServerConnManager.GetSockets())
-                {
-                    if (ws.Value.State==WebSocketState.Open)
-                    {
-                        await SendMessageAsync(ws.Value, message);
-                    }
-                    else
-                    {
-                        //remove from dict
-                    }
-                }
-            }
+           
         }
     }
 }

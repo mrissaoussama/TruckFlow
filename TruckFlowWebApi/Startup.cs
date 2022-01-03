@@ -37,10 +37,12 @@ namespace TruckFlowWebApi
         {
             services.AddWebSocketMiddleWare();
             services.AddSingleton<WebSocketServerConnectionManager>();
-            services.AddScoped<ICarCheck, CarCheck>();
-            services.AddScoped<IDAOEvent, DAOEvent>();
-            //services.AddScoped<ICarCheck, TruckFlow>();
-            services.AddSingleton<TruckFlow>();
+            services.AddSingleton<ICarCheck, CarCheck>();
+            services.AddSingleton<IDAOEvent, DAOEvent>();
+            services.AddSingleton<ITruckFlow, TruckFlow>();
+
+            //services.AddTransient<TruckFlow>();
+            // services.AddSingleton<TruckFlow>();
 
             services.AddCors(o => o.AddDefaultPolicy( builder =>
             {

@@ -56,7 +56,6 @@ namespace DAOExpressSqlEF6.DAONS
             var Event =  dbContext.Events.Find(e);
             if(Event!=null)
             {
-                Event = e;
                 dbContext.SaveChanges();
             }
         }
