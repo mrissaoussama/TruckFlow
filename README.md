@@ -1,3 +1,4 @@
+A simulation of a camera scanning vehicle plates written using angular and C#. created to test Websockets
 angular version : 13.0.2
 
 
